@@ -37,10 +37,6 @@
             <button type="submit">Search</button>
           </form>
         </div>
-        <span class="measurements">
-          <a href="#" id="celcius-link">C°</a> |
-          <a href="#" id="fahrenheit-link">F°</a>
-        </span>
       </section>
 
       <!-- temp and day info -->
@@ -63,6 +59,11 @@
               <ul>
                 <li>Humidity: <span id="humidity"></span></li>
                 <li>Wind: <span id="wind"></span></li>
+                <img
+                  id="weather-icon"
+                  src="https://img.icons8.com/color-glass/42/000000/cloud.png"
+                  alt="Weather Icon"
+                />
               </ul>
             </div>
           </div>
@@ -71,7 +72,7 @@
       </section>
 
       <!--5 day forecast-->
-      <section class="container">
+      <!-- <section class="container">
         <div class="row week-forecast">
           <div class="col">
             <h3>Fri</h3>
@@ -114,7 +115,7 @@
             <span>5°</span>
           </div>
         </div>
-      </section>
+      </section> -->
     </main>
     <script>
       // formatting time and day
@@ -145,6 +146,7 @@
         const day = days[dayArray];
         return day;
       }
+
       // getting current time & day and displaying it
       const currentTime = document.querySelector("#current-time");
       let newCurrentTime = new Date();
@@ -167,12 +169,51 @@
         document.querySelector("#wind").innerHTML = `${windSpeed}km/h`;
         document.querySelector("#weather-type").innerHTML =
           response.data.weather[0].main;
+
+        // Display weather icon
+        const weatherType = response.data.weather[0].main.toLowerCase();
+        let iconUrl = "";
+        switch (weatherType) {
+          case "clear":
+            iconUrl = "https://img.icons8.com/color-glass/42/000000/sun.png";
+            break;
+          case "clouds":
+            iconUrl = "https://img.icons8.com/color-glass/42/000000/cloud.png";
+            break;
+          case "rain":
+            iconUrl = "https://img.icons8.com/color-glass/42/000000/rain.png";
+            break;
+          case "snow":
+            iconUrl = "https://img.icons8.com/color-glass/42/000000/snow.png";
+            break;
+          case "thunderstorm":
+            iconUrl = "https://img.icons8.com/color-glass/42/000000/storm.png";
+            break;
+          case "drizzle":
+            iconUrl =
+              "https://img.icons8.com/color-glass/42/000000/light-rain.png";
+            break;
+          case "mist":
+          case "smoke":
+          case "haze":
+          case "dust":
+          case "fog":
+          case "sand":
+          case "ash":
+          case "squall":
+          case "tornado":
+            iconUrl = "https://img.icons8.com/color-glass/42/000000/fog.png";
+            break;
+          default:
+            iconUrl = "https://img.icons8.com/color-glass/42/000000/cloud.png";
+        }
+        document.querySelector("#weather-icon").src = iconUrl;
       }
 
       function searchCity(city) {
         const apiKey = "2b5fc755ac2ec59250868b5527df31c4";
-        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric`;
-        axios.get(`${apiUrl}&appid=${apiKey}`).then(displayWeatherInfo);
+        const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+        axios.get(apiUrl).then(displayWeatherInfo);
       }
 
       function handleSubmit(event) {
